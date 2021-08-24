@@ -1,7 +1,7 @@
 const buildApp = require("./models/app.js");
 const conf=require("./config");
 
-const startApp = async () => {
+const startApp =  () => {
   const appOption = {
     logger: true,
   }
@@ -10,7 +10,7 @@ const startApp = async () => {
 
   try {
     // await app.listen(conf.port, conf.host); //this format is not working
-    await app.listen(conf.port, conf.host);
+     app.listen(conf.port, conf.host);
     console.log("App is running on port:++ " + conf.port+' | '+conf.db);
   } catch (error) {
     throw error;
@@ -18,6 +18,7 @@ const startApp = async () => {
 };
 
 startApp();
+
 
 //curl -H "Content-Type:application/json" --data "{...your data}" http://localhost:3000/login
 
