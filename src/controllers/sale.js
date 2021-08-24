@@ -7,7 +7,7 @@ const reverse = async (req, res) => {
   console.log("------" + cdate);
   console.log(":::::::::::::::INVESTIGATE IF THE ISM IS CLOSE::::::::::");
   const sql_investigate = `SELECT s.mem_id,i.ism_active FROM sale s LEFT JOIN installment i ON s.ism_id= i.ism_ref WHERE s.sale_bill_id= ${billId}`;
-  await con.query(`sql_investigate`, (err, result) => {
+  await conn.query(`sql_investigate`, (err, result) => {
     if (err) {
       res.send("ເກີດປັນຫາການເຊື່ອມຖານຂໍ້ມູນ: " + err);
     } else {
