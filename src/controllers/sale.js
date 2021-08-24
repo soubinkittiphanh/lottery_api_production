@@ -28,6 +28,7 @@ const reverse = async (req, res) => {
       }
     });
   } catch (error) {
+    console.log(":::::::cancel bill error=>:::::::::"+error);
     
   }
 
