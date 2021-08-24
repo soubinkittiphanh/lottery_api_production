@@ -144,7 +144,7 @@ async function full_lot_survey(luck_num, price, ism_ref) {
 
   console.log("number:" + luck_num + " price: " + price + "ism: " + ism_ref);
   try {
-    const res = await db.query(
+    const res = db.query(
       `SELECT SUM(s.sale_price) as total,l.${luck_num_type} as maxsale \
         FROM  salelimit l LEFT JOIN  sale s ON s.sale_num = ? and s.ism_id = ?  WHERE l.id=1  `,
       [luck_num, ism_ref]
