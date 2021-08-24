@@ -187,7 +187,8 @@ async function full_lot_survey(luck_num, price, ism_ref) {
       );
       return isover;
     }
-  } catch {
+  } catch(er){
+    console.log(er);
     throw new Error("Post with this id was not found");
   }
 };
