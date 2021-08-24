@@ -7,25 +7,30 @@ const reverse = async (req, res) => {
   console.log("------" + cdate);
   console.log(":::::::::::::::INVESTIGATE IF THE ISM IS CLOSE::::::::::");
   const sql_investigate = `SELECT s.mem_id,i.ism_active FROM sale s LEFT JOIN installment i ON s.ism_id= i.ism_ref WHERE s.sale_bill_id= ${billId}`;
-  await conn.query(`sql_investigate`, (err, result) => {
-    if (err) {
-      res.send("ເກີດປັນຫາການເຊື່ອມຖານຂໍ້ມູນ: " + err);
-    } else {
-      console.log("RESULT" + result);
-      if (result[0]["ism_active"] == 0) {
-        res.status(404).send("ງວດປິດແລ້ວບໍ່ສາມາດຍົກເລີກບິນໄດ້");
+  try {
+    await con.query(`sql_investigate`, (err, result) => {
+      if (err) {
+        res.send("ເກີດປັນຫາການເຊື່ອມຖານຂໍ້ມູນ: " + err);
       } else {
-        const sql = `UPDATE sale SET is_cancel=1,cac_date="${cdate}" WHERE sale_bill_id="${billId}"`;
-        PromiseDb.query(sql, (er, result) => {
-          if (er) {
-            res.send("Error");
-          } else {
-            res.send("Completed");
-          }
-        });
+        console.log("RESULT" + result);
+        if (result[0]["ism_active"] == 0) {
+          res.status(404).send("ງວດປິດແລ້ວບໍ່ສາມາດຍົກເລີກບິນໄດ້");
+        } else {
+          const sql = `UPDATE sale SET is_cancel=1,cac_date="${cdate}" WHERE sale_bill_id="${billId}"`;
+           conn.query(sql, (er, result) => {
+            if (er) {
+              res.send("Error");
+            } else {
+              res.send("Completed");
+            }
+          });
+        }
       }
-    }
-  });
+    });
+  } catch (error) {
+    
+  }
+
 };
 
 const sale = async (req, res) => {
