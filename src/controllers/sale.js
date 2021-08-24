@@ -1,5 +1,5 @@
-const db = require("../config/dbconn");
-const PromiseDb=require("../config/dbconnPromise");
+const conn = require("../config/dbconn");
+const con=require("../config/dbconnPromise");
 const reverse = async (req, res) => {
   console.log("//::::::::::::::CANCEL BILL::::::::::::::");
   const billId = req.body.billId;
@@ -78,7 +78,7 @@ const sale = async (req, res) => {
     }
 
     console.log("SQL: " + sql);
-    await PromiseDb.query(
+    conn.query(
       "INSERT INTO `sale`(`sale_bill_id`, `ism_id`, `sale_num`, `sale_price`, `mem_id`, `client_date`,`qr_code`) VALUES " +
         sql +
         "",
@@ -104,9 +104,8 @@ const sale = async (req, res) => {
     res.send(full_lucknum);
   }
 };
-
 async function get_billnum() {
-  const res = await PromiseDb.query(
+  const res = await con.query(
     `SELECT MAX(sale_bill_id) as pre_bill FROM sale HAVING MAX(sale_bill_id) IS NOT null`
   );
 
@@ -124,7 +123,7 @@ async function get_billnum() {
     console.log("NEXT_REF + 1: " + next_ref);
     return next_ref;
   }
-}
+};
 async function full_lot_survey(luck_num, price, ism_ref) {
   let luck_num_type = "";
   let isover = [];
@@ -144,9 +143,9 @@ async function full_lot_survey(luck_num, price, ism_ref) {
 
   console.log("number:" + luck_num + " price: " + price + "ism: " + ism_ref);
   try {
-    const res = db.query(
+    const res = await con.query(
       `SELECT SUM(s.sale_price) as total,l.${luck_num_type} as maxsale \
-        FROM  salelimit l LEFT JOIN  sale s ON s.sale_num = ? and s.ism_id = ?  WHERE l.id=1  `,
+      FROM  salelimit l LEFT JOIN  sale s ON s.sale_num = ? and s.ism_id = ?  WHERE l.id=1  `,
       [luck_num, ism_ref]
     );
     console.log("LEK: " + luck_num_type + " to");
