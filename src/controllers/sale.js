@@ -1,5 +1,5 @@
 const db = require("../config/dbconn");
-
+const PromiseDb=require("../config/dbconnPromise");
 const reverse = async (req, res) => {
   console.log("//::::::::::::::CANCEL BILL::::::::::::::");
   const billId = req.body.billId;
@@ -106,7 +106,7 @@ const sale = async (req, res) => {
 };
 
 async function get_billnum() {
-  const res = await con.db.query(
+  const res = await PromiseDb.query(
     `SELECT MAX(sale_bill_id) as pre_bill FROM sale HAVING MAX(sale_bill_id) IS NOT null`
   );
 
@@ -144,7 +144,7 @@ async function full_lot_survey(luck_num, price, ism_ref) {
 
   console.log("number:" + luck_num + " price: " + price + "ism: " + ism_ref);
   try {
-    const res = await con.db.query(
+    const res = await PromiseDb.query(
       `SELECT SUM(s.sale_price) as total,l.${luck_num_type} as maxsale \
         FROM  salelimit l LEFT JOIN  sale s ON s.sale_num = ? and s.ism_id = ?  WHERE l.id=1  `,
       [luck_num, ism_ref]
