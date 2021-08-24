@@ -20,12 +20,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
-  },
-  "dbConf": {
-    "host": "mariadb-34248-0.cloudclusters.net",
-    "user": "root",
-    "password": "SDAT@3480",
-    "database": "lottery_test",
-    "port": 34248
   }
 }
