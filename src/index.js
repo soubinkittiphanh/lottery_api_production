@@ -8,7 +8,7 @@ const startApp = async () => {
 
   const app = await buildApp(appOption);
   app.listen(conf.port,()=>{
-    console.log("Your app is runing  :"+conf.port);
+    console.log("Your app is runing  :"+conf.port+' | :'+conf.db.database);
   })
 
   // try {
