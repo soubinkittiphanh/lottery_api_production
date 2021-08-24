@@ -7,7 +7,7 @@ const reverse = async (req, res) => {
   console.log("------" + cdate);
   console.log(":::::::::::::::INVESTIGATE IF THE ISM IS CLOSE::::::::::");
   const sql_investigate = `SELECT s.mem_id,i.ism_active FROM sale s LEFT JOIN installment i ON s.ism_id= i.ism_ref WHERE s.sale_bill_id= ${billId}`;
-  conn.db.query(`sql_investigate`, (err, result) => {
+  await db.query(`sql_investigate`, (err, result) => {
     if (err) {
       res.send("ເກີດປັນຫາການເຊື່ອມຖານຂໍ້ມູນ: " + err);
     } else {
@@ -16,7 +16,7 @@ const reverse = async (req, res) => {
         res.status(404).send("ງວດປິດແລ້ວບໍ່ສາມາດຍົກເລີກບິນໄດ້");
       } else {
         const sql = `UPDATE sale SET is_cancel=1,cac_date="${cdate}" WHERE sale_bill_id="${billId}"`;
-        conn.db.query(sql, (er, result) => {
+        PromiseDb.query(sql, (er, result) => {
           if (er) {
             res.send("Error");
           } else {
@@ -78,7 +78,7 @@ const sale = async (req, res) => {
     }
 
     console.log("SQL: " + sql);
-    conn.db.query(
+    await PromiseDb.query(
       "INSERT INTO `sale`(`sale_bill_id`, `ism_id`, `sale_num`, `sale_price`, `mem_id`, `client_date`,`qr_code`) VALUES " +
         sql +
         "",
