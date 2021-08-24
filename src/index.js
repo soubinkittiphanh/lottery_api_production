@@ -10,7 +10,7 @@ const startApp = async () => {
 
   try {
     // await app.listen(conf.port, conf.host); //this format is not working
-    (await app).listen(conf.port, conf.host);
+    await app.listen(conf.port, conf.host);
     console.log("App is running on port:++ " + conf.port+' | '+conf.db);
   } catch (error) {
     throw error;
