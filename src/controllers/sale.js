@@ -14,13 +14,17 @@ const reverse = async (req, res) => {
       } else {
         console.log("RESULT" + result);
         if (result[0]["ism_active"] == 0) {
+          console.log("::::::::::ປິດງວດແລ້ວ::::::::::::");
           res.status(404).send("ງວດປິດແລ້ວບໍ່ສາມາດຍົກເລີກບິນໄດ້");
         } else {
+          console.log("::::::::::ເປີດງວດຢູ່::::::::::::");
           const sql = `UPDATE sale SET is_cancel=1,cac_date="${cdate}" WHERE sale_bill_id="${billId}"`;
-           conn.query(sql, (er, result) => {
+          conn.query(sql, (er, result) => {
             if (er) {
+              console.log("::::::::::ຍົກເລີກບໍ່ສຳເລັດ::::::::::::");
               res.send("Error");
             } else {
+              console.log("::::::::::ຍົກເລີກສຳເລັດ::::::::::::");
               res.send("Completed");
             }
           });
