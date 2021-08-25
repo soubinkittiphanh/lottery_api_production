@@ -21,7 +21,7 @@ const init = async (app) => {
 };
 const ism = async (app) => {
   await app.get("/fetchism", Ism.getISM);
-  await app.get("/ismref", Ism.getISM);
+  await app.get("/ismref", Ism.genISMID);
   await app.post("/createism", Ism.createISM);
   await app.put("/updateism", Ism.updateISM);
   await app.get("/getism_ref", Ism.getISMREF);
