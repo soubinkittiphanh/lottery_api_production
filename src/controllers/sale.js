@@ -48,7 +48,7 @@ const sale = async (req, res) => {
   let branch;
 
   // MANUAL ALLOW 5,6 NUMBER SALE
-  const getBranch = `SELECT brc_code FROM member WHERE member_id = '${user}'`;
+  const getBranch = `SELECT brc_code FROM member WHERE mem_id = '${user}'`;
   try {
     const res =await con.query(getBranch);
     branch = res[0]["brc_code"];
