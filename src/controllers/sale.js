@@ -49,12 +49,13 @@ const sale = async (req, res) => {
 
   // MANUAL ALLOW 5,6 NUMBER SALE
   const getBranch = `SELECT brc_code FROM member WHERE member_id = '${user}'`;
-  await con.query(getBranch, (er, result) => {
-    if (er) {
-    } else {
-      branch = result[0]["brc_code"];
-    }
-  });
+  try {
+    const res =await con.query(getBranch);
+    branch = res[0]["brc_code"];
+  } catch (error) {
+    console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH"+error);
+  }
+
   // END MANUAL ALLOW 5,6 NUMBER SALE
 
   for (var i = 0; i < sale.length; i++) {
@@ -62,7 +63,7 @@ const sale = async (req, res) => {
     const luck_num = sale[i].lek;
     const price_buy = sale[i].sale;
 
-    const isfull = await full_lot_survey(luck_num, price_buy, ism,branch);
+    const isfull = await full_lot_survey(luck_num, price_buy, ism, branch);
     console.log("isfull: " + isfull);
     if (isfull !== "passed") {
       full_lucknum.push({ item: isfull });
@@ -168,10 +169,11 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     console.log(res[0][0]);
     console.log(res[0][0].maxsale);
     const available = res[0][0].maxsale - parseInt(res[0][0].total);
-    const manualMaxFiveSPAIY=1000;
+    const manualMaxFiveSPAIY = 1000;
     if (res[0].length < 1) {
       throw new Error("Post with this id was not found");
-    } else if (brc == "SPAIY" && luck_num_type == "five_digits") { //MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
+    } else if (brc == "SPAIY" && luck_num_type == "five_digits") {
+      //MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
       if (res[0][0].total === null && price > manualMaxFiveSPAIY) {
         isover.push(
           "ເລກ: " +
@@ -197,7 +199,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
             Intl.NumberFormat().format(price)
         );
         return isover;
-      }// END MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
+      } // END MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
     } else if (res[0][0].total === null && res[0][0].maxsale < price) {
       console.log("AlreadySold: " + res[0][0].total);
       console.log("Max: " + res[0][0].maxsale);
