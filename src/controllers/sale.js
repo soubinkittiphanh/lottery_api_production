@@ -172,6 +172,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     console.log(res[0][0]);
     console.log(res[0][0].maxsale);
     const available = res[0][0].maxsale - parseInt(res[0][0].total);
+    const saletotal = parseInt(res[0][0].total);
     const manualMaxFiveSPAIY = 1000;
     console.log("BRC OUTSIDE CASE:"+brc);
     if (res[0].length < 1) {
@@ -184,7 +185,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
           "ເລກ: " +
             luck_num +
             " ເຕັມ ວ່າງ: " +
-            Intl.NumberFormat().format(res[0][0].maxsale) +
+            Intl.NumberFormat().format(manualMaxFiveSPAIY) +
             " ຍອດຕ້ອງການຊື້: " +
             Intl.NumberFormat().format(price)
         );
@@ -199,7 +200,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
           "ເລກ: " +
             luck_num +
             " ເຕັມ ວ່າງ: " +
-            Intl.NumberFormat().format(available) +
+            Intl.NumberFormat().format(saletotal-manualMaxFiveSPAIY) +
             " ຍອດຕ້ອງການຊື້: " +
             Intl.NumberFormat().format(price)
         );
