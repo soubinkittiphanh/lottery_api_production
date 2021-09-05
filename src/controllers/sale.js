@@ -51,7 +51,8 @@ const sale = async (req, res) => {
   const getBranch = `SELECT brc_code FROM member WHERE mem_id = '${user}'`;
   try {
     const res =await con.query(getBranch);
-    branch = res[0]["brc_code"];
+    branch = res[0][0]["brc_code"];
+    console.log('====>{01} BRANCH EUERY: '+res);
     console.log('====>{01} BRANCH EUERY: '+res[0]["brc_code"]);
   } catch (error) {
     console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH"+error);
