@@ -55,6 +55,7 @@ const sale = async (req, res) => {
   } catch (error) {
     console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH"+error);
   }
+  console.log('====> BRANCH EUERY: '+branch);
 
   // END MANUAL ALLOW 5,6 NUMBER SALE
 
