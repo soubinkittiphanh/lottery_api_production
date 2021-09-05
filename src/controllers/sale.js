@@ -52,6 +52,7 @@ const sale = async (req, res) => {
   try {
     const res =await con.query(getBranch);
     branch = res[0]["brc_code"];
+    console.log('====>{01} BRANCH EUERY: '+res[0]["brc_code"]);
   } catch (error) {
     console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH"+error);
   }
