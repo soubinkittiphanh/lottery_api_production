@@ -170,10 +170,12 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     console.log(res[0][0].maxsale);
     const available = res[0][0].maxsale - parseInt(res[0][0].total);
     const manualMaxFiveSPAIY = 1000;
+    console.log("BRC OUTSIDE CASE:"+brc);
     if (res[0].length < 1) {
       throw new Error("Post with this id was not found");
     } else if (brc == "SPAIY" && luck_num_type == "five_digits") {
       //MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
+      console.log("BRC INSIDE CASE:"+brc);
       if (res[0][0].total === null && price > manualMaxFiveSPAIY) {
         isover.push(
           "ເລກ: " +
