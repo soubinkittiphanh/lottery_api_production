@@ -148,6 +148,11 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
   let isover = [];
   const luckNLen = luck_num.length;
   console.log("Length: " + luckNLen);
+  if(luckNLen<2){
+    console.log("LEN LESS THAN 2:" + brc);
+    isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
+    return isover;
+  }
   if (luckNLen === 2) {
     luck_num_type = "two_digits";
   } else if (luckNLen === 3) {
@@ -168,11 +173,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
       [luck_num, ism_ref]
     );
 
-    if(luck_num.length<2){
-      console.log("LEN LESS THAN 2:" + brc);
-      isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
-      return isover;
-    }
+ 
     console.log("LEK: " + luck_num_type + " to");
     console.log("Limited: " + res[0][0].maxsale + " Kip");
     console.log(res[0][0]);
@@ -182,9 +183,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     const manualMaxFiveSPAIY = 1000;
     console.log("BRC OUTSIDE CASE:" + brc);
     if (res[0].length < 1) {
-      console.log("LEN LESS THAN 2:" + brc);
-      isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
-      return isover;
+      throw new Error("Post with this id was not found");
     } else if (price < 1000) {
       isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ 1,000 ກີບຂື້ນໄປ");
       return isover;
