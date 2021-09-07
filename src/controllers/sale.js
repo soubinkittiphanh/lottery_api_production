@@ -167,6 +167,12 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
       FROM  salelimit l LEFT JOIN  sale s ON s.sale_num = ? and s.ism_id = ? and s.is_cancel=0  WHERE l.id=1  `,
       [luck_num, ism_ref]
     );
+
+    if(luck_num.length<2){
+      console.log("LEN LESS THAN 2:" + brc);
+      isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
+      return isover;
+    }
     console.log("LEK: " + luck_num_type + " to");
     console.log("Limited: " + res[0][0].maxsale + " Kip");
     console.log(res[0][0]);
@@ -176,6 +182,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     const manualMaxFiveSPAIY = 1000;
     console.log("BRC OUTSIDE CASE:" + brc);
     if (res[0].length < 1) {
+      console.log("LEN LESS THAN 2:" + brc);
       isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
       return isover;
     } else if (price < 1000) {
