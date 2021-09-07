@@ -50,14 +50,14 @@ const sale = async (req, res) => {
   // MANUAL ALLOW 5,6 NUMBER SALE
   const getBranch = `SELECT brc_code FROM member WHERE mem_id = '${user}'`;
   try {
-    const res =await con.query(getBranch);
+    const res = await con.query(getBranch);
     branch = res[0][0]["brc_code"];
-    console.log('====>{01} BRANCH EUERY: '+res);
-    console.log('====>{01} BRANCH EUERY: '+res[0]["brc_code"]);
+    console.log("====>{01} BRANCH EUERY: " + res);
+    console.log("====>{01} BRANCH EUERY: " + res[0]["brc_code"]);
   } catch (error) {
-    console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH"+error);
+    console.log("ERROR FROM MANUAUL AWAIT QUERY BRANCH" + error);
   }
-  console.log('====> BRANCH EUERY: '+branch);
+  console.log("====> BRANCH EUERY: " + branch);
 
   // END MANUAL ALLOW 5,6 NUMBER SALE
 
@@ -174,12 +174,16 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     const available = res[0][0].maxsale - parseInt(res[0][0].total);
     const saletotal = parseInt(res[0][0].total);
     const manualMaxFiveSPAIY = 1000;
-    console.log("BRC OUTSIDE CASE:"+brc);
+    console.log("BRC OUTSIDE CASE:" + brc);
     if (res[0].length < 1) {
-      throw new Error("Post with this id was not found");
+      isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ ສອງໂຕຂື້ນໄປ");
+      return isover;
+    } else if (price < 1000) {
+      isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ 1,000 ກີບຂື້ນໄປ");
+      return isover;
     } else if (brc == "SPAIY" && luck_num_type == "five_digits") {
       //MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
-      console.log("BRC INSIDE CASE:"+brc);
+      console.log("BRC INSIDE CASE:" + brc);
       if (res[0][0].total === null && price > manualMaxFiveSPAIY) {
         isover.push(
           "ເລກ: " +
@@ -200,7 +204,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
           "ເລກ: " +
             luck_num +
             " ເຕັມ ວ່າງ: " +
-            Intl.NumberFormat().format(saletotal-manualMaxFiveSPAIY) +
+            Intl.NumberFormat().format(saletotal - manualMaxFiveSPAIY) +
             " ຍອດຕ້ອງການຊື້: " +
             Intl.NumberFormat().format(price)
         );
