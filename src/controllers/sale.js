@@ -187,7 +187,7 @@ async function full_lot_survey(luck_num, price, ism_ref, brc) {
     } else if (price < 1000) {
       isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ 1,000 ກີບຂື້ນໄປ");
       return isover;
-    } else if (brc == "SPAIY" && luck_num_type == "five_digits") {
+    } else if ((brc == "SPAIY" || brc=="JOT") && luck_num_type == "five_digits") {
       //MANAUL ALLOW 5 AND 6 DIGIT FOR SPAIY
       console.log("BRC INSIDE CASE:" + brc);
       if (res[0][0].total === null && price > manualMaxFiveSPAIY) {
