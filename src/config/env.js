@@ -6,7 +6,7 @@ const config = {
     host: "mariadb-34248-0.cloudclusters.net",
     user: "root",
     password: "SDAT@3480",
-    database: "lottery_test",
+    database: "lottery_temp",
     port: 34248,
   },
 };

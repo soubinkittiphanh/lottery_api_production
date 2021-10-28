@@ -1,11 +1,23 @@
 const db = require("../../config/dbconn");
 const getProductNeck = async (req, res) => {
   console.log("//::::::::::::::FULL LIMMITED::::::::::::::");
-  await db.query("SELECT * FROM salelimit", (err, result) => {
+  console.log("//::::::::::::::FULL LIMMITED::::::::::::::"+req.query.brc_id);
+  await db.query(`SELECT * FROM salelimit where brc_code ='${req.query.brc_id}'`, (err, result) => {
     if (err) {
+      console.log('Error');
       res.send(err);
     } else {
-      res.send(result);
+      if(result.length==0){
+        console.log('less than 0');
+        db.query("SELECT * FROM salelimit where id ='1'", (er, re) => {
+          if(er)return res.send("Error: "+er)
+          res.send(re);
+        })
+      }else{
+        console.log('greater than 0');
+        res.send(result);
+
+      }
     }
   });
 };
@@ -17,19 +29,50 @@ const updateProductNeck = async (req, res) => {
   const four = req.body.four;
   const five = req.body.five;
   const six = req.body.six;
+  const brc_id = req.body.brc_id;
   console.log(id);
-  await db.query(
-    "UPDATE `salelimit` SET `two_digits`=?,`three_digits`=?,`four_digits`=?,`five_digits`=?,`six_digits`=? WHERE `id`=?",
-    [two, three, four, five, six, id],
-    (er, result) => {
-      if (er) {
-        res.send("ມີຂໍ້ຜິດພາດທາງດ້ານເຊີເວີ!");
-      } else {
-        res.send("ອັບເດດຂໍ້ມູນຮຽບຮ້ອຍ");
-      }
+  await db.query(`SELECT * FROM salelimit where brc_code='${brc_id}'`,(er,re)=>{
+    if(er)return res.send("Error: "+er)
+    if(re.length==0){
+      db.query(`INSERT INTO salelimit(brc_code, two_digits, three_digits, four_digits, five_digits, six_digits)VALUES(
+        '${brc_id}',${two},${three},${four},${five},${six}
+      )`,(er,re)=>{
+        if(er) return res.send("Error: "+er)
+        res.send("Transaction completed");
+      });
+    }else{
+      db.query(
+        "UPDATE `salelimit` SET `two_digits`=?,`three_digits`=?,`four_digits`=?,`five_digits`=?,`six_digits`=? WHERE `brc_code`=?",
+        [two, three, four, five, six, brc_id],
+        (er, result) => {
+          if (er) {
+            console.log(er);
+            res.send("ມີຂໍ້ຜິດພາດທາງດ້ານເຊີເວີ!");
+          } else {
+            res.send("ອັບເດດຂໍ້ມູນຮຽບຮ້ອຍ");
+          }
+        }
+      );
     }
-  );
+  });
+
 };
+const createProductNeck=async(req,res)=>{
+  const body=req.body;
+  const id =req.query.id;
+  const two = body.two;
+  const three = body.three;
+  const four = body.four;
+  const five = body.five;
+  const six = body.six;
+  const brc_id = body.brc_id;
+  await db.query(`INSERT INTO salelimit(brc_code, two_digits, three_digits, four_digits, five_digits, six_digits)VALUES(
+    ${brc_id},${two},${three},${four},${five},${six}
+  )`,(er,re)=>{
+    if(er) return res.send("Error: "+er)
+    res.send("Transaction completed");
+  });
+}
 module.exports={
     getProductNeck,
     updateProductNeck,
