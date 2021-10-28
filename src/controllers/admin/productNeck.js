@@ -54,7 +54,7 @@ const updateProductNeck = async (req, res) => {
         }
       );
     }
-  });
+  });//
 
 };
 const createProductNeck=async(req,res)=>{
