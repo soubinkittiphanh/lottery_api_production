@@ -2,7 +2,10 @@ const db = require("../../config/dbconn");
 const getProductNeck = async (req, res) => {
   console.log("//::::::::::::::FULL LIMMITED::::::::::::::");
   console.log("//::::::::::::::FULL LIMMITED::::::::::::::"+req.query.brc_id);
-  await db.query(`SELECT * FROM salelimit where brc_code ='${req.query.brc_id}'`, (err, result) => {
+  const sqlComConditn=req.query.brc_id?` where brc_code ='${req.query.brc_id}'`:'';
+  const sqlCom=`SELECT * FROM salelimit ${sqlComConditn}`;
+  console.log("sql "+sqlCom);
+  await db.query(sqlCom, (err, result) => {
     if (err) {
       console.log('Error');
       res.send(err);
