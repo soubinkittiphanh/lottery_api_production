@@ -32,6 +32,12 @@ const winrep = async (req, res) => {
     }
   });
 };
+const topSaleRep=async(req,res)=>{
+  await db.query("SELECT t.* FROM (SELECT s.sale_num as luck_num,SUM(s.sale_price) as total_sale FROM sale s WHERE s.ism_id=(SELECT MAX(i.ism_ref) FROM installment i) AND s.is_cancel=0 GROUP BY s.sale_num) t ORDER BY t.total_sale DESC LIMIT 10;",(er,re)=>{
+    if(er)return res.send("Error: "+er);
+    res.send(re);
+  })
+}
 const salerep = async (req, res) => {
   const r_date = req.query.p_date;
   const r_admin = req.query.p_admin;
@@ -121,4 +127,5 @@ module.exports = {
   salerep,
   bonusrep,
   branchrep,
+  topSaleRep,
 };

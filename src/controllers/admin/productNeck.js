@@ -12,7 +12,7 @@ const getProductNeck = async (req, res) => {
     } else {
       if(result.length==0){
         console.log('less than 0');
-        db.query("SELECT * FROM salelimit where id ='1'", (er, re) => {
+        db.query("SELECT * FROM salelimit where brc_code ='POPPY'", (er, re) => {
           if(er)return res.send("Error: "+er)
           res.send(re);
         })
@@ -60,6 +60,12 @@ const updateProductNeck = async (req, res) => {
   });//
 
 };
+const cancelProductNeck=async(req,res)=>{
+  await db.query(`DELETE FROM salelimit WHERE brc_code ='${req.body.brc_code}'`,(er,re)=>{
+    if(er) return res.send("Error: "+er)
+    res.send("Transaction completed");
+  });
+}
 const createProductNeck=async(req,res)=>{
   const body=req.body;
   const id =req.query.id;
@@ -79,4 +85,5 @@ const createProductNeck=async(req,res)=>{
 module.exports={
     getProductNeck,
     updateProductNeck,
+    cancelProductNeck,
 }

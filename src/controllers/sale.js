@@ -60,9 +60,7 @@ const sale = async (req, res) => {
     console.log("====> BRANCH EUERY: " + branch);
 
     // END MANUAL ALLOW 5,6 NUMBER SALE
-    await setTimeout(() => {
-        console.log("Delaying....");
-    }, 5000);
+
     for (var i = 0; i < sale.length; i++) {
         console.log("For: " + sale[i].lek + " Laka:" + sale[i].sale);
         const luck_num = sale[i].lek;
@@ -149,6 +147,7 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
     let luck_num_type = "";
     let isover = [];
     const luckNLen = luck_num.length;
+    let sqlComMax;
     console.log("Length: " + luckNLen);
     if (luckNLen < 2) {
         console.log("LEN LESS THAN 2:" + brc);
@@ -166,33 +165,54 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
     } else if (luck_num === 6) {
         luck_num_type = "six_digits";
     }
-
     console.log("number:" + luck_num + " price: " + price + "ism: " + ism_ref);
-    // brc='NN'
     try {
-
-        const res = await con.query(`
+        const responseData = await con.query(`SELECT l.brc_code FROM salelimit l WHERE l.brc_code='${brc}'`)
+        const re = responseData[0];
+        console.log(re);
+        if (re.length == 0) {
+            brc = "POPPY"; //ຖ້າສາຂາໃດບໍ່ໄດ້ກຳນົດເລກເຕັມຮູ ແມ່ນໃຫ້ ເລກເຕັມຮູຂອງ ສາຂາ ປັອບປີ ມາໄລ່
+        } else {
+            console.log("RE .LENG: " + re.length);
+            console.log("RE .CODE: " + re[0]["brc_code"]);
+        }
+        sqlComMax = `
     SELECT IFNULL(SUM(s.sale_price),0) AS total,IFNULL(l.${luck_num_type},0) AS maxsale FROM branch b
     LEFT JOIN member m ON m.brc_code=b.co_code
     LEFT JOIN sale s on s.mem_id=m.mem_id and s.ism_id=(SELECT MAX(i.ism_ref) FROM installment i) AND s.is_cancel=0 AND s.sale_num='${luck_num}'
     LEFT JOIN salelimit l ON l.brc_code='${brc}'
-    WHERE b.co_code='${brc}'`)
-        console.log("LIST LEN: "+res.length);
-        console.log("LEK: " + luck_num_type );
-        console.log("Max: " + res[0][0].maxsale + " Kip");
-        console.log(res[0][0]);
-        console.log(res[0][0].maxsale);
-        const availableToSale = res[0][0].maxsale - parseInt(res[0][0].total);
-        const alreadySold = parseInt(res[0][0].total);
-        const maxSale = parseInt(res[0][0].maxsale);
+    WHERE b.co_code='${brc}'`
+        console.log("ISOVER LEN: " + isover.length);
+        return await fullLotCheckSub(sqlComMax, luck_num_type, luck_num, price);
+    } catch (error) {
+        isover.push(
+            "ເກີດຂໍ້ຜິດພາດ ທາງເຊີເວີ"
+        );
+        console.log("Error: " + error);
+        return isover;
+    }
+}
+
+
+
+const fullLotCheckSub = async (sqlComMax, luck_num_type, luck_num, price) => {
+    let isover = [];
+    try {
+
+
+        const responseData = await con.query(sqlComMax);
+        const re = responseData[0]
+        console.log("LIST LEN: " + re[0].length);
+        console.log("LEK: " + luck_num_type);
+        console.log("Max: " + re[0].maxsale + " Kip")
+        const availableToSale = re[0].maxsale - parseInt(re[0].total);
+        const alreadySold = parseInt(re[0].total);
+        const maxSale = parseInt(re[0].maxsale);
         console.log("Avai: " + Intl.NumberFormat().format(availableToSale) + " Sold: " + Intl.NumberFormat().format(alreadySold) + " Max: " + Intl.NumberFormat().format(maxSale));
-        console.log("BRC OUTSIDE CASE:" + brc);
-        if (res[0].length < 1) {
-            throw new Error("Lucky num lenght less than 2 digits");
-        } else if (price < 1000) {
+        if (price < 1000) {
             isover.push("ເລກ: " + luck_num + " ຕ້ອງຊື້ 1,000 ກີບຂື້ນໄປ");
             return isover;
-        } else if (res[0][0].maxsale < price) {
+        } else if (maxSale < price) {
             isover.push(
                 "ເລກ: " +
                 luck_num +
@@ -201,6 +221,8 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
                 " ຍອດຕ້ອງການຊື້: " +
                 Intl.NumberFormat().format(price)
             );
+            console.log("MAX < PRICE");
+            console.log("ISOVER: " + isover[0]);
             return isover;
         } else if (maxSale >= alreadySold + price) {
             return "passed";
@@ -215,9 +237,12 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
             );
             return isover;
         }
-    } catch (er) {
-        console.log(er);
-        throw new Error("Post with this id was not found");
+    } catch (error) {
+        isover.push(
+            "ເກີດຂໍ້ຜິດພາດ ທາງເຊີເວີ"
+        );
+        console.log("Error: " + error);
+        return isover;
     }
 }
 

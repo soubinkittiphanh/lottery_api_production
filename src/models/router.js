@@ -48,6 +48,7 @@ const member = async (app) => {
 const productNeck = async (app) => {
   await app.get("/getsalelimit", ProductNeck.getProductNeck);
   await app.put("/updatesalelim", ProductNeck.updateProductNeck);
+  await app.put("/cancelsalelim", ProductNeck.cancelProductNeck);
 };
 const payRate = async (app) => {
   await app.get("/getpayrate", PayRate.getPayRate);
@@ -58,6 +59,7 @@ const report = async (app) => {
   await app.get("/winreport", Report.winrep);
   await app.post("/bonuschk", Report.bonusrep);
   await app.get("/brcreport", Report.branchrep);
+  await app.get("/topsale", Report.topSaleRep);
 };
 const sale = async (app) => {
   await app.post("/sale", Sale.sale);
