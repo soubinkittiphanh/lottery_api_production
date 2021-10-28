@@ -144,7 +144,7 @@ async function get_billnum() {
         console.log("NEXT_REF + 1: " + next_ref);
         return next_ref;
     }
-}
+}//
 const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
     let luck_num_type = "";
     let isover = [];
