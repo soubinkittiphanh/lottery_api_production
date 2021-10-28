@@ -22,7 +22,7 @@ const getProductNeck = async (req, res) => {
   });
 };
 const updateProductNeck = async (req, res) => {
-  console.log("//::::::::::::::UPDATE LIMMITED::::::::::::::");
+  console.log("//::::::::::::::UPDATE LIMMITED NEW VERSION::::::::::::::");
   const id = req.query.id;
   const two = req.body.two;
   const three = req.body.three;
