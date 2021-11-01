@@ -61,6 +61,7 @@ const updateProductNeck = async (req, res) => {
 
 };
 const cancelProductNeck=async(req,res)=>{
+  if(req.body.brc_code=='DEFAULT') return res.send("ບໍ່ສາມາດດຳເນີນການໄດ້ ເນື່ອງຈາກ ລາຍການນີ້ເປັນລາຍການຫລັກ");
   await db.query(`DELETE FROM salelimit WHERE brc_code ='${req.body.brc_code}'`,(er,re)=>{
     if(er) return res.send("Error: "+er)
     res.send("Transaction completed");

@@ -148,6 +148,7 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
     let isover = [];
     const luckNLen = luck_num.length;
     let sqlComMax;
+    let sqlConditn=`IN ('${brc}')`;
     console.log("Length: " + luckNLen);
     if (luckNLen < 2) {
         console.log("LEN LESS THAN 2:" + brc);
@@ -171,17 +172,20 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
         const re = responseData[0];
         console.log(re);
         if (re.length == 0) {
-            brc = "POPPY"; //ຖ້າສາຂາໃດບໍ່ໄດ້ກຳນົດເລກເຕັມຮູ ແມ່ນໃຫ້ ເລກເຕັມຮູຂອງ ສາຂາ ປັອບປີ ມາໄລ່
+            brc = "DEFAULT"; //ຖ້າສາຂາໃດບໍ່ໄດ້ກຳນົດເລກເຕັມຮູ ແມ່ນໃຫ້ ເລກເຕັມຮູຂອງ ສາຂາ ປັອບປີ ມາໄລ່
+            sqlConditn=`NOT IN (SELECT BRC_CODE FROM salelimit WHERE BRC_CODE !='${brc}')`
         } else {
             console.log("RE .LENG: " + re.length);
             console.log("RE .CODE: " + re[0]["brc_code"]);
         }
+
         sqlComMax = `
     SELECT IFNULL(SUM(s.sale_price),0) AS total,IFNULL(l.${luck_num_type},0) AS maxsale FROM branch b
     LEFT JOIN member m ON m.brc_code=b.co_code
     LEFT JOIN sale s on s.mem_id=m.mem_id and s.ism_id=(SELECT MAX(i.ism_ref) FROM installment i) AND s.is_cancel=0 AND s.sale_num='${luck_num}'
     LEFT JOIN salelimit l ON l.brc_code='${brc}'
-    WHERE b.co_code='${brc}'`
+    WHERE b.co_code ${sqlConditn}`
+    // WHERE b.co_code NOT IN('${brc}')`
         console.log("ISOVER LEN: " + isover.length);
         return await fullLotCheckSub(sqlComMax, luck_num_type, luck_num, price);
     } catch (error) {
