@@ -186,6 +186,7 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
     LEFT JOIN salelimit l ON l.brc_code='${brc}'
     WHERE b.co_code ${sqlConditn}`
     // WHERE b.co_code NOT IN('${brc}')`
+    console.log("command: "+sqlComMax);
         console.log("ISOVER LEN: " + isover.length);
         return await fullLotCheckSub(sqlComMax, luck_num_type, luck_num, price);
     } catch (error) {
