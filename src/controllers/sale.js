@@ -172,8 +172,8 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
         const re = responseData[0];
         console.log(re);
         if (re.length == 0) {
-            brc = "DEFAULT"; //ຖ້າສາຂາໃດບໍ່ໄດ້ກຳນົດເລກເຕັມຮູ ແມ່ນໃຫ້ ເລກເຕັມຮູຂອງ ສາຂາ ປັອບປີ ມາໄລ່
-            sqlConditn=`NOT IN (SELECT BRC_CODE FROM salelimit WHERE BRC_CODE !='${brc}')`
+            brc = "DEFAULT"; //ຖ້າສາຂາໃດບໍ່ໄດ້ກຳນົດເລກເຕັມຮູ ແມ່ນໃຫ້ ເລກເຕັມຮູຂອງ ສາຂາ Default ມາໄລ່
+            sqlConditn=`NOT IN (SELECT BRC_CODE FROM salelimit WHERE BRC_CODE NOT IN('${brc}'))`
         } else {
             console.log("RE .LENG: " + re.length);
             console.log("RE .CODE: " + re[0]["brc_code"]);
