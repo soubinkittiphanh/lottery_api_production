@@ -2,7 +2,7 @@ const db = require("../../config/dbconn");
 const getISM = async (req, res) => {
   const param_date = req.query.date;
   console.log("//::::::::::::::INSTALLMENT FETCH::::::::::::::");
-  await db.query(
+  db.query(
     "SELECT * FROM installment where ism_date=?",
     [param_date],
     (err, result) => {
@@ -20,7 +20,7 @@ const createISM = async (req, res) => {
   const i_res = req.body.ism_res;
   const i_active = req.body.ism_active;
   console.log("//::::::::::::::CREATE ISM::::::::::::::");
-  await db.query(
+  db.query(
     "INSERT INTO installment(ism_ref, ism_date, ism_result, ism_active) values(?,?,?,?)",
     [i_ref, i_date, i_res, i_active],
     (err, result) => {
@@ -41,7 +41,7 @@ const updateISM = async (req, res) => {
   console.log("//::::::::::::::UPDATE ISM::::::::::::::");
   console.log(id);
   console.log(result);
-  await db.query(
+  db.query(
     "UPDATE installment SET ism_ref= ?,ism_date=?,ism_result=?,ism_active=? WHERE id= ? ",
     [ref, date, result, active, id],
     (err, result) => {
@@ -55,7 +55,7 @@ const updateISM = async (req, res) => {
 };
 const genISMID = async (req, res) => {
   console.log("//::::::::::::::ISM FETCH::::::::::::::");
-  await db.query(
+  db.query(
     "SELECT MAX(`ism_ref`) as cur_ref FROM `installment` HAVING MAX(`ism_ref`) IS NOT null",
     (er, result) => {
       var numRows = result.length;
@@ -78,7 +78,7 @@ const genISMID = async (req, res) => {
 };
 const getISMREF = async (req, res) => {
   console.log("//::::::::::::::GET ISM REF MAX::::::::::::::");
-  await db.query(
+  db.query(
     "SELECT  MAX(ism_ref) as ism_ref, ism_date FROM installment  WHERE ism_active = 1 LIMIT 1",
     (err, result) => {
       if (err) {
