@@ -76,15 +76,29 @@ const genISMID = async (req, res) => {
     }
   );
 };
+
+const dateUtil=(nmbr)=>{
+  if (nmbr < 10 ) return "0"+nmbr
+  return nmbr
+}
 const getISMREF = async (req, res) => {
   console.log("//::::::::::::::GET ISM REF MAX::::::::::::::");
+
+    // "SELECT ism_ref, ism_date FROM installment WHERE ism_ref=(SELECT MAX(ism_ref) FROM installment WHERE ism_active = 1)",
   db.query(
-    "SELECT  MAX(ism_ref) as ism_ref, ism_date FROM installment  WHERE ism_active = 1 LIMIT 1",
+    "SELECT MAX(ism_ref) as ism_ref, ism_date FROM installment  WHERE ism_active = 1 LIMIT 1",
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        console.log("res");
+        if (result.length<1) return res.send(result);
+        console.log("null ? ",result[0]['ism_date'] );
+        if (result[0]['ism_date'] == null) return res.send(result);
+        const fullDate = result[0]['ism_date'].toLocaleString().split(",")[0]
+        const year = fullDate.split("/")[2]
+        const date = dateUtil(fullDate.split("/")[1])
+        const month = dateUtil(fullDate.split("/")[0])
+        result[0]['ism_date']= year+"-"+month+"-"+date+"T17:00:00.000Z"
         res.send(result);
       }
     }

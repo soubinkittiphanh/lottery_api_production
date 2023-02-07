@@ -1,6 +1,6 @@
 const db = require("../../config/dbconn");
 closeService = () => {
-    const sqlCom = `UPDATE installment SET ism_active=0 WHERE ism_ref=(SELECT MAX(ism_ref) FROM installment)`
+    const sqlCom = `UPDATE installment SET ism_active=0,inputter='AUTO CLOSING' WHERE ism_ref=(SELECT MAX(ism_ref) FROM installment)`
     db.query(sqlCom,(er,result)=>{
         if(er){
             console.log("SQL Error: ",er.message);
@@ -42,8 +42,8 @@ createISM = (i_ref) => {
     let i_res = ""
     let i_active = 1;
     db.query(
-        "INSERT INTO installment(ism_ref, ism_date, ism_result, ism_active) values(?,?,?,?)",
-        [i_ref, sqlDate, i_res, i_active],
+        "INSERT INTO installment(ism_ref, ism_date, ism_result, ism_active,inputter) values(?,?,?,?,?)",
+        [i_ref, sqlDate, i_res, i_active,'AUTO OPEN'],
         (err, result) => {
             if (err) {
                 console.log("AUTO ISM CREATE FAIL ", err);
@@ -62,7 +62,7 @@ doSomething = () => {
     let mm = timeObj.split(":")[1]
     let isEvening = timeObj.split(" ")[2] == "PM"
     console.log("Worker is runing", dateObj, day.getDay());
-    if (hh == 8 && mm == 10 && isEvening) closeService();
-    if ((day.getDay() == 1 || day.getDay() == 3 || day.getDay() == 5) && (!isEvening && hh == 12 && mm == 01)) openSevice();
+    if ((hh === "8" && mm === "20") && isEvening) closeService();
+    if ((day.getDay() == 1 || day.getDay() == 3 || day.getDay() == 5) && (!isEvening && hh == "12" && mm == "01")) openSevice();
 }
 module.exports =  doSomething 
