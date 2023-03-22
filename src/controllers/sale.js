@@ -163,7 +163,7 @@ const fullLotCheck = async (luck_num, price, ism_ref, brc) => {
         luck_num_type = "four_digits";
     } else if (luckNLen === 5) {
         luck_num_type = "five_digits";
-    } else if (luck_num === 6) {
+    } else if (luckNLen === 6) {
         luck_num_type = "six_digits";
     }
     console.log("number:" + luck_num + " price: " + price + "ism: " + ism_ref);

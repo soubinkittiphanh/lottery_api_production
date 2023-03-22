@@ -113,7 +113,7 @@ LEFT JOIN
  
 GROUP BY m.brc_code
   `;
-  await db.query(sql, (err, result) => {
+   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
       res.send("ເກີດຂໍ້ຜິດພາດທາງດ້ານເຊີເວີ: " + err);
