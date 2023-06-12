@@ -84,7 +84,7 @@ const createBranch=async(req, res) => {
   const getBranch=async(req, res) => {
     console.log("::::::::::::::FETCH BRC::::::::::::::");
     const sql = "SELECT * FROM branch";
-    await db.query(sql, (err, reslt) => {
+    db.query(sql, (err, reslt) => {
       if (err) {
         res.send("ເກີດຂໍ້ຜິດພາດ: " + err);
       } else {

@@ -1,4 +1,4 @@
-const buildApp = require("./models/app.js");
+const buildApp = require("./app.js");
 const conf=require("./config");
 const autoService = require("./controllers/admin/autoFunction")
 const startApp = async () => {
